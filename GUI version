@@ -1,0 +1,77 @@
+import java.util.Random;
+import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Main {
+    private static int attempts;
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Guessing Game");
+        frame.setSize(600, 600);
+        frame.setLayout(new GridLayout(4, 1));
+
+        JLabel instructions = new JLabel("Welcome to the Guessing Game! \n A random number between 1 and 100 will be chosen and you will have to guess it.\n You will receive clues if your guess is too high or too low. \n If you haven't guessed right in your 10th attempt the random number will be displayed and you have lost.\n Good luck!");
+        instructions.setBounds(20, 10, 460, 80);
+        frame.add(instructions);
+
+        JLabel guessLabel = new JLabel("Enter a number between 1 and 100:");
+        guessLabel.setBounds(20, 100, 200, 20);
+        frame.add(guessLabel);
+
+        JTextField textBox1 = new JTextField();
+        textBox1.setBounds(230, 100, 100, 20);
+        frame.add(textBox1);
+
+        JLabel feedback = new JLabel("");
+        feedback.setBounds(20, 140, 460, 20);
+        frame.add(feedback);
+
+        JButton guessBn = new JButton("Guess");
+        guessBn.setBounds(20, 200, 100, 30);
+        frame.add(guessBn);
+
+        JButton quitBn = new JButton("Exit");
+        quitBn.setBounds(130, 200, 100, 30);
+        frame.add(quitBn);
+
+        Random random = new Random();
+        int randomNum = random.nextInt(100) + 1;
+
+
+        guessBn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String input = textBox1.getText();
+
+                if (input.matches("\\d+")) {
+                    int guess = Integer.parseInt(input);
+                    attempts++;
+
+                    if (guess == randomNum) {
+                        feedback.setText("You guessed correctly! The number is " + randomNum + " in " + attempts + " attempts!");
+                    } else if (guess > randomNum) {
+                        feedback.setText("Your guess is too high! You have made " + attempts + " attempts.");
+                    } else {
+                        feedback.setText("Your guess is too low! You have made " + attempts + " attempts.");
+                    }
+
+                    if (attempts >= 10 && guess != randomNum) {
+                        feedback.setText("You're out of attempts! The number was " + randomNum + ".");
+                    }
+                } else {
+                    feedback.setText("Error: Invalid input!");
+                }
+
+            }
+        });
+
+        quitBn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);         //Kamen helped me with the exit part, because I didn't know how to terminate the program
+            }
+        });
+
+        frame.setVisible(true);
+    }
+}
